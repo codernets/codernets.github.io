@@ -64,6 +64,10 @@ router.post('/reblog/:id', auth,function(req,res,next){
     if(err) return next (err);
     if(!result) return next({err: "Couldnt find that post!"});
 
+    User.findOne({email: req.payload.email}, function(err, user){
+      comment.avi = user.pic;
+      comment.creatorId = user._id;
+      if(!user) return res.status(404).send({err: "Could not find that user."});
     post.comments.push(comment);
     console.log(post.comments , " post.comments");
 
@@ -82,6 +86,7 @@ router.post('/reblog/:id', auth,function(req,res,next){
   		if(!result) return next ({err: "That user wasnt found for updating!"});
   	// });
     res.send();
+});
 });
 });
 });

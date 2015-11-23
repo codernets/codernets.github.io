@@ -12,13 +12,12 @@
           <input required ng-model="vm.post.title" />
         </md-input-container>
 
-        <textarea  ng-model="vm.post.body"></textarea>
+        <textarea ui-tinymce  ng-model="vm.post.body"></textarea>
         <md-input-container>
         <label>Tags</label>
            <md-chips
                ng-model="vm.post.tags"
                readonly="vm.post.readonly"
-               placeholder="Enter a tag"
                delete-button-label="Remove Tag"
                delete-hint="Press delete to remove tag"
                ></md-chips>
@@ -32,28 +31,52 @@
 <md-divider ng-if="!$last" ></md-divider>
 <h5 style="text-align: center"> News Feed </h5>
 
-<md-content>
-  <md-list style="padding-left: 70px">
 
-    <md-list-item ng-repeat='p in vm.allPosts' >
-      <div class='md-list-item-text' style='padding:10px; padding-left:30px' >
+    <div ng-repeat='p in vm.allPosts' >
+        <div layout>
+          <div flex="15" id="parent">
         <img src="{{p.avi}}" class="avatar" />
+        <div id="hover-content" flex="15">
+          <a ui-sref="Profile({id: p.creatorId})">{{p.createdBy.name }} {{p.createdBy.lastName }}</a>
+          <md-button class="zmdi zmdi-plus-circle-o small-btn" ng-click="vm.followOnPost(p);" aria-label="follow"> </md-button>
+          <md-button class="zmdi zmdi-minus-circle-outline small-btn" ng-click="vm.unfollowOnPost(p);" aria-label="unfollow"> </md-button>
+          <md-button class="zmdi zmdi-email" ui-sref="Message({id: p.creatorId})"></md-button>
+        </div>
+      </div>
+      <div flex-offset="5">
+        <div layout="column">
         <h2 >  {{p.title}} </h2>
         <h4 ng-bind-html="p.body"></h4>
         <h5> By: <a ui-sref="Profile({id: p.creatorId})">{{p.createdBy.name }} {{p.createdBy.lastName }}</a> on {{p.date | dateFilter}}</h5>
         <h6> Posted in: <a ng-repeat="t in p.tags" ui-sref="Tag({tag: t})">{{t}},</a></h6>
         <div ng-repeat="c in p.comments">
+          <div layout>
+            <div flex="15" id="parent">
+          <img src="{{c.avi}}" class="avatar" />
+          <div id="hover-content" flex="15">
+            <div layout="column">
+            <md-button class="zmdi zmdi-plus-circle-o small-btn" ng-click="vm.followOnPost(p);" aria-label="follow"> </md-button>
+            <md-button class="zmdi zmdi-minus-circle-outline small-btn" ng-click="vm.unfollowOnPost(p);" aria-label="unfollow"> </md-button>
+            <md-button class="zmdi zmdi-email small-btn" ui-sref="Message({id: c.creatorId})"></md-button>
+          </div>
+          </div>
+        </div>
+            <div flex-offset="5">
+              <h2>{{c.creatorName}} says:</h2>
           <h3>{{c.title}}</h3>
           <h4>{{c.content}}</h4>
         </div>
-
-        <div layout>
-          <md-button class="zmdi zmdi-thumb-down" ng-click="vm.downvote(p)" aria-label="down"> </md-button>
-          <md-button class="zmdi zmdi-thumb-up" ng-click="vm.upvote(p)" aria-label="up"> </md-button>
+        </div>
+        </div>
       </div>
-
-      <md-button class="zmdi zmdi-plus-circle-o" ng-click="vm.followOnPost(p);" aria-label="follow"> Follow</md-button>
-      <md-button class="zmdi zmdi-minus-circle-outline" ng-click="vm.unfollowOnPost(p);" aria-label="unfollow"> Unfollow</md-button>
+      <div layout>
+        <div flex>
+        <md-button class="zmdi zmdi-thumb-down" ng-click="vm.downvote(p)" aria-label="down"> </md-button>
+        <md-button class="zmdi zmdi-thumb-up" ng-click="vm.upvote(p)" aria-label="up"> </md-button>
+      </div>
+    </div>
+    <div layout>
+      <div flex>
       <md-button class="zmdi zmdi-redo" ng-click="p.reblog = !p.reblog">  Reblog</md-button>
         <div uib-collapse="!p.reblog">
           <div class="well well-lg">
@@ -73,7 +96,17 @@
     </div>
           </div>
         </div>
+    </div>
+      </div>
+
+
+
+
+        </div>
+        <div layout>
+          <div flex>
         <div class="share">
+          <h4>Share:</h4>
           <a href="#" id="linkedin" class="social-btn"
             socialshare
             socialshare-provider="linkedin"
@@ -104,11 +137,9 @@
             <i class="fa fa-google-plus"></i>
             </a>
           </div>
+        </div>
+          </div>
         <md-divider ng-if="!$last"></md-divider>
-    </md-list-item>
-  </md-list>
-</md-content>
-</div>
 <!-- <script src="https://apis.google.com/js/platform.js" async defer></script>
 <g:hangout
    render="createhangout"

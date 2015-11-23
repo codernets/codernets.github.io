@@ -387,4 +387,26 @@ md-tabs.md-default-theme.md-primary, md-tabs.md-primary > md-tabs-wrapper {
 .avatar {
 	width:50px;
 	height:50px;
+	border-radius: 5px;
+}
+
+#hover-content {
+	opacity:0;
+-webkit-transition:.5s;
+-moz-transition:.5s;
+-o-transition:.5s;
+-ms-transition:.5s;
+transition:.5s;
+}
+#parent:hover #hover-content {
+    opacity:1;
+}
+
+md-button.small-btn{
+	max-height: 10px;
+	max-width: 15px;
+}
+
+.small-btn{
+	max-width:10px;
 }
